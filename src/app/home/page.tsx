@@ -1,6 +1,6 @@
 import { getQuestions } from "@/api/questions";
 import QuestionClient from "./QuestionClient";
-import { QStateStoreProvider } from "@/stores/qustions/provider";
+import StoreProvider from "@/stores/qustions/provider";
 import { QStateModel } from "@/stores/qustions/store";
 
 export default async function HomePage() {
@@ -13,8 +13,8 @@ export default async function HomePage() {
   }));
 
   return (
-    <QStateStoreProvider value={{ qState }}>
+    <StoreProvider questionInit={qState}>
       <QuestionClient questions={questions} />;
-    </QStateStoreProvider>
+    </StoreProvider>
   );
 }

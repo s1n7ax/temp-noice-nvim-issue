@@ -2,19 +2,20 @@
 
 import { QuestionModel } from "@/api/questions";
 import Question from "@/components/Question/Question";
-import { useQStateStore } from "@/stores/qustions/provider";
-import { QStateModel } from "@/stores/qustions/store";
+import { QStateModel, RootState, updateQState } from "@/stores/qustions/store";
+import { useDispatch, useSelector } from "react-redux";
 
 export interface QuestionClientProps {
   questions: QuestionModel[];
 }
 
 export default function QuestionClient({ questions }: QuestionClientProps) {
-  const qState = useQStateStore((state) => state.qState);
-  const updateQState = useQStateStore((state) => state.updateQState);
+  const qState = useSelector((state: RootState) => state.questions);
+  const dispatch = useDispatch();
 
   const getQSetter = (id: number) => {
-    return (data: QStateModel) => updateQState(id, data);
+    return (data: QStateModel) =>
+      dispatch(updateQState({ id, newState: data }));
   };
 
   const errorQ = qState.find((q) => q.hasError === true);

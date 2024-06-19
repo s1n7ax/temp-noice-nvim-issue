@@ -1,48 +1,21 @@
 "use client";
 
-import { createContext, useContext, useRef, type ReactNode } from "react";
-import { useStore } from "zustand";
+import { useRef } from "react";
+import { Provider } from "react-redux";
+import { makeStore, AppStore, QStateModel, initializeQState } from "./store";
 
-import {
-  QState,
-  createQStateStore,
-  type QStateStore,
-} from "@/stores/qustions/store";
-
-export type QStateStoreApi = ReturnType<typeof createQStateStore>;
-
-export const CounterStoreContext = createContext<QStateStoreApi | undefined>(
-  undefined,
-);
-
-export interface QStateStoreProviderProps {
-  value: QState;
-  children: ReactNode;
-}
-
-export const QStateStoreProvider = ({
+export default function StoreProvider({
   children,
-  value,
-}: QStateStoreProviderProps) => {
-  const storeRef = useRef<QStateStoreApi>();
-
+  questionInit,
+}: {
+  children: React.ReactNode;
+  questionInit: QStateModel[];
+}) {
+  const storeRef = useRef<AppStore>();
   if (!storeRef.current) {
-    storeRef.current = createQStateStore(value);
+    storeRef.current = makeStore();
+    storeRef.current.dispatch(initializeQState(questionInit));
   }
 
-  return (
-    <CounterStoreContext.Provider value={storeRef.current}>
-      {children}
-    </CounterStoreContext.Provider>
-  );
-};
-
-export const useQStateStore = <T,>(selector: (store: QStateStore) => T): T => {
-  const counterStoreContext = useContext(CounterStoreContext);
-
-  if (!counterStoreContext) {
-    throw new Error(`useCounterStore must be used within CounterStoreProvider`);
-  }
-
-  return useStore(counterStoreContext, selector);
-};
+  return <Provider store={storeRef.current}>{children}</Provider>;
+}
