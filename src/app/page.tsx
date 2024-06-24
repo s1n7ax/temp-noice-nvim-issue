@@ -1,9 +1,11 @@
-import Question from "@/components/Question/Question";
+"use client";
+
+import { useEffect } from "react";
 
 export default function Home() {
-  return (
-    <main>
-      <Question />
-    </main>
-  );
+  useEffect(() => {
+    console.log("hello world");
+  });
+
+  return <main></main>;
 }

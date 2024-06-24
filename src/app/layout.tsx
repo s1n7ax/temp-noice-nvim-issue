@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Provider as JotaiProvider } from "jotai";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,10 +15,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <JotaiProvider>
-      <html lang="en">
-        <body className={inter.className}>{children}</body>
-      </html>
-    </JotaiProvider>
+    <html lang="en">
+      <body className={inter.className}>{children}</body>
+    </html>
   );
 }

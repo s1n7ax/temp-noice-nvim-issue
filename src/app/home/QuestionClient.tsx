@@ -10,6 +10,11 @@ export interface QuestionClientProps {
 }
 
 export default function QuestionClient({ questions }: QuestionClientProps) {
+  const qState: QStateModel[] = questions.map((q) => ({
+    id: q.id,
+    answer: "",
+    hasError: false,
+  }));
   const qState = useSelector((state: RootState) => state.questions);
   const dispatch = useDispatch();
 
